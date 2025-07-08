@@ -52,6 +52,7 @@ func (LMB *LoginMiddlewareBuild) Build() gin.HandlerFunc {
 		//	session.Save()
 		//	return
 		//}
+		return
 	}
 
 }
