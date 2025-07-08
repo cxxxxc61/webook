@@ -46,12 +46,12 @@ func (LMB *LoginMiddlewareBuild) Build() gin.HandlerFunc {
 			session.Save()
 			return
 		}
-		updatetimeval, _ := updatatime.(int)
-		if now-updatetimeval > 60 {
-			session.Set("update_Time", now)
-			session.Save()
-			return
-		}
+		////updatetimeval, _ := updatatime.(int)
+		//if now-updatetimeval > 60 {
+		//	session.Set("update_Time", now)
+		//	session.Save()
+		//	return
+		//}
 	}
 
 }
