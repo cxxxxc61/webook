@@ -1,10 +1,10 @@
 package web
 
 import (
-	"github.com/cxxxxc61/study/webook/internal/web/middleware"
-	"github.com/cxxxxc61/study/webook/repository"
-	"github.com/cxxxxc61/study/webook/repository/dao"
-	"github.com/cxxxxc61/study/webook/service"
+	"github.com/cxxxxc61/webook/internal/web/middleware"
+	"github.com/cxxxxc61/webook/repository"
+	"github.com/cxxxxc61/webook/repository/dao"
+	"github.com/cxxxxc61/webook/service"
 	regexp "github.com/dlclark/regexp2"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/sessions"

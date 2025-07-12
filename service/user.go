@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 	"errors"
-	"github.com/cxxxxc61/study/webook/domain"
-	"github.com/cxxxxc61/study/webook/repository"
+	"github.com/cxxxxc61/webook/domain"
+	"github.com/cxxxxc61/webook/repository"
 	"golang.org/x/crypto/bcrypt"
 )
 

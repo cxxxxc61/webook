@@ -1,12 +1,12 @@
 package main
 
-import "github.com/cxxxxc61/study/webook/internal/web"
+import "github.com/cxxxxc61/webook/internal/web"
 
 func main() {
 	sever := web.Registerroutes()
 	sever.Run(":8080") // 监听并在 0.0.0.0:8080 上启动服务
 
-	text()
+	//text()
 
 	//sever := gin.Default()
 	//u := &web.UserHandler{}

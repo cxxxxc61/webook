@@ -1,10 +1,12 @@
 package web
 
 import (
-	"github.com/cxxxxc61/study/webook/domain"
-	"github.com/cxxxxc61/study/webook/service"
+	"fmt"
+	"github.com/cxxxxc61/webook/domain"
+	"github.com/cxxxxc61/webook/service"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 	"net/http"
 )
 
@@ -92,6 +94,41 @@ func (u *UserHandler) Login(c *gin.Context) {
 	session := sessions.Default(c)
 	session.Set("userId", user.Id)
 	session.Save()
+	c.String(http.StatusOK, "登录成功")
+
+	return
+}
+
+func (u *UserHandler) LoginJWT(c *gin.Context) {
+	type Loginreq struct {
+		Email    string `json:"email"`
+		Password string `json:"password"`
+	}
+
+	var req Loginreq
+	if err := c.Bind(&req); err != nil {
+		return
+	}
+	user, err := u.svc.Login(c, domain.User{
+		Email:    req.Email,
+		Password: req.Password,
+	})
+	if err == service.PasswordorUserErr {
+		c.String(http.StatusOK, "账号/邮箱或密码不对")
+		return
+	}
+	if err != nil {
+		c.String(http.StatusOK, "系统错误")
+		return
+	}
+	token := jwt.New(jwt.SigningMethodES512)
+	tokenstr, err := token.SignedString([]byte("bHO2mkqCDKSB2GsqikJGlQURD0KtwiuZI4zpWZYolG7QCE64hTM0r6O5VhrdjFHt"))
+	if err != nil {
+		c.String(http.StatusInternalServerError, "系统错误")
+		return
+	}
+	fmt.Println(tokenstr)
+	fmt.Println(user)
 	c.String(http.StatusOK, "登录成功")
 
 	return

@@ -2,8 +2,8 @@ package repository
 
 import (
 	"context"
-	"github.com/cxxxxc61/study/webook/domain"
-	"github.com/cxxxxc61/study/webook/repository/dao"
+	"github.com/cxxxxc61/webook/domain"
+	"github.com/cxxxxc61/webook/repository/dao"
 )
 
 var (
