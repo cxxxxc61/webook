@@ -33,9 +33,9 @@ services:
     hostname: redis
     privileged: true
     environment:
-      - REDIS_PASSWORD=&NCN0iJdzC79
+         - REDIS_PASSWORD=cxc20060601
     ports:
-      - "26379:30379"
+      - "6379:6379"
     volumes:
       - "./redis/data:/bitnami/redis/data"
       - "./redis/conf:/opt/bitnami/redis/etc"

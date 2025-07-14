@@ -1,10 +1,10 @@
 package middleware
 
 import (
-	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 	"net/http"
-	"time"
+	"strings"
 )
 
 type LoginjwtMiddlewareBuild struct {
@@ -32,27 +32,27 @@ func (LMB *LoginjwtMiddlewareBuild) Build() gin.HandlerFunc {
 				return
 			}
 		}
-		session := sessions.Default(c)
-		id := session.Get("userId")
-		if id == nil {
+		tokenheader := c.GetHeader("Authorization")
+		if tokenheader == "" {
 			c.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}
-
-		updatatime := session.Get("update_Time")
-		now := time.Now().Second()
-		if updatatime == nil {
-			session.Set("update_Time", now)
-			session.Save()
+		segs := strings.Split(tokenheader, " ")
+		if len(segs) != 2 {
+			c.AbortWithStatus(http.StatusUnauthorized)
+		}
+		tokenstr := segs[1]
+		token, err := jwt.Parse(tokenstr, func(token *jwt.Token) (interface{}, error) {
+			return []byte("bHO2mkqCDKSB2GsqikJGlQURD0KtwiuZI4zpWZYolG7QCE64hTM0r6O5VhrdjFHt"), nil
+		})
+		if err != nil {
+			c.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}
-		////updatetimeval, _ := updatatime.(int)
-		//if now-updatetimeval > 60 {
-		//	session.Set("update_Time", now)
-		//	session.Save()
-		//	return
-		//}
-		return
+		if !token.Valid {
+			c.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
 	}
 
 }

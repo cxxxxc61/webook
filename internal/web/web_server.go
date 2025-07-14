@@ -121,12 +121,13 @@ func (u *UserHandler) LoginJWT(c *gin.Context) {
 		c.String(http.StatusOK, "系统错误")
 		return
 	}
-	token := jwt.New(jwt.SigningMethodES512)
+	token := jwt.New(jwt.SigningMethodHS512)
 	tokenstr, err := token.SignedString([]byte("bHO2mkqCDKSB2GsqikJGlQURD0KtwiuZI4zpWZYolG7QCE64hTM0r6O5VhrdjFHt"))
 	if err != nil {
 		c.String(http.StatusInternalServerError, "系统错误")
 		return
 	}
+	c.Header("x-jwt-token", tokenstr)
 	fmt.Println(tokenstr)
 	fmt.Println(user)
 	c.String(http.StatusOK, "登录成功")

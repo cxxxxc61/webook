@@ -62,9 +62,9 @@ func initwebsever() *gin.Engine {
 		//AllowOrigins:     []string{"https://foo.com"},
 		AllowMethods: []string{"POST", "GET"},
 		//业务请求中可以带上的头
-		AllowHeaders: []string{"Origin"},
+		AllowHeaders: []string{"Origin", "Content-Type"},
 		//允许传入的头
-		ExposeHeaders: []string{"Content-Length"},
+		ExposeHeaders: []string{"x-jwt-token"},
 		//用户认证信息
 		AllowCredentials: true,
 		//类型地址
@@ -77,9 +77,9 @@ func initwebsever() *gin.Engine {
 		MaxAge: 12 * time.Minute,
 	}))
 
-	store, err := redis.NewStore(64,
-		"tcp", "117.50.198.118:30379",
-		"", "&NCNOiJdzC79",
+	store, err := redis.NewStore(16,
+		"tcp", "127.0.0.1:6379",
+		"", "cxc20060601",
 		[]byte("bHO2mkqCDKSB2GsqikJGlQURD0KtwiuZI4zpWZYolG7QCE64hTM0r6O5VhrdjFHt"))
 	if err != nil {
 		panic(err)
