@@ -8,7 +8,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"net/http"
+	"time"
 )
+
+type UserClaims struct {
+	jwt.RegisteredClaims
+	Uid int64
+}
 
 func (u *UserHandler) Signup(c *gin.Context) {
 	type Signupreq struct {
@@ -121,14 +127,20 @@ func (u *UserHandler) LoginJWT(c *gin.Context) {
 		c.String(http.StatusOK, "系统错误")
 		return
 	}
-	token := jwt.New(jwt.SigningMethodHS512)
+
+	claims := UserClaims{
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Minute * 10)),
+		},
+		Uid: user.Id,
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS512, claims)
 	tokenstr, err := token.SignedString([]byte("bHO2mkqCDKSB2GsqikJGlQURD0KtwiuZI4zpWZYolG7QCE64hTM0r6O5VhrdjFHt"))
 	if err != nil {
 		c.String(http.StatusInternalServerError, "系统错误")
 		return
 	}
 	c.Header("x-jwt-token", tokenstr)
-	fmt.Println(tokenstr)
 	fmt.Println(user)
 	c.String(http.StatusOK, "登录成功")
 

@@ -85,7 +85,7 @@ func initwebsever() *gin.Engine {
 		panic(err)
 	}
 	sever.Use(sessions.Sessions("mysession", store))
-	sever.Use(middleware.NewLoginMiddlewareBuild().
+	sever.Use(middleware.NewLoginjwtMiddlewareBuild().
 		Ignorepath("/users/login").
 		Ignorepath("/users/signup").Build())
 

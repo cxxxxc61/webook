@@ -1,10 +1,13 @@
 package middleware
 
 import (
+	"github.com/cxxxxc61/webook/internal/web"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
+	"log"
 	"net/http"
 	"strings"
+	"time"
 )
 
 type LoginjwtMiddlewareBuild struct {
@@ -42,7 +45,8 @@ func (LMB *LoginjwtMiddlewareBuild) Build() gin.HandlerFunc {
 			c.AbortWithStatus(http.StatusUnauthorized)
 		}
 		tokenstr := segs[1]
-		token, err := jwt.Parse(tokenstr, func(token *jwt.Token) (interface{}, error) {
+		claims := &web.UserClaims{}
+		token, err := jwt.ParseWithClaims(tokenstr, claims, func(token *jwt.Token) (interface{}, error) {
 			return []byte("bHO2mkqCDKSB2GsqikJGlQURD0KtwiuZI4zpWZYolG7QCE64hTM0r6O5VhrdjFHt"), nil
 		})
 		if err != nil {
@@ -53,6 +57,17 @@ func (LMB *LoginjwtMiddlewareBuild) Build() gin.HandlerFunc {
 			c.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}
+
+		if claims.ExpiresAt.Sub(time.Now()) < time.Second*50 {
+			claims.ExpiresAt = jwt.NewNumericDate(time.Now().Add(time.Minute))
+			tokenstr, err = token.SignedString([]byte("bHO2mkqCDKSB2GsqikJGlQURD0KtwiuZI4zpWZYolG7QCE64hTM0r6O5VhrdjFHt"))
+			if err != nil {
+				log.Println("jwt续约失败", err)
+			}
+			c.Header("x-jwt-token", tokenstr)
+		}
+
+		c.Set("claims", claims)
 	}
 
 }
